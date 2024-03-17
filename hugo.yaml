@@ -9,11 +9,30 @@ params:
     Title: Welcome to my personal blog
     Content: To know more about me, check out on LinkedIn or GitHub
 
-  socialIcons: # optional
-    - name: "LinkedIn"
-      url: "https://www.linkedin.com/in/simeone-vilardo-a644349a/"
-    - name: "GitHub"
-      url: "https://github.com/SimeoneVilardo"
+languageCode: en-us
+languages:
+  en:
+    languageCode: en-us
+    params:
+      description: "A blog about software development and other tech topics"
+      homeInfoParams:
+        Title: Welcome to my personal blog
+        Content: To know more about me, check out on LinkedIn or GitHub
+  it:
+    languageCode: it-it
+    params:
+      description: "Un blog su sviluppo software e altri argomenti tecnici"
+      homeInfoParams:
+        Title: Benvenuti nel mio blog personale
+        Content: Per saperne di più su di me, cercami su LinkedIn o GitHub
+
+
+
+socialIcons: # optional
+  - name: "LinkedIn"
+    url: "https://www.linkedin.com/in/simeone-vilardo-a644349a/"
+  - name: "GitHub"
+    url: "https://github.com/SimeoneVilardo"
 
 menu:
   main:
