@@ -140,5 +140,6 @@ Having `3` as the first numerical value will result in a number that, when conve
 When creating these systems, make sure that the generated codes:
 - Are not predictable and reproducible
 - Cannot generate collisions
+
 In my opinion, it would be nice to be able to generate self-contained codes, but I'm not sure if it's possible. JWT tokens are a great example; thanks to their digital signature mechanism, you can trust their content and origin. However, if such a token needs to be manually used by the user, it should be as short and easy as possible, so embedding the signature within the token doesn't seem feasible.
 Let's not skimp. Let's use tables and let's use API calls. A simple random alphanumeric string of 8 characters allows for `2821109907456` combinations. That's almost three trillion. And being random, good luck reproducing a code or generating a collision.
