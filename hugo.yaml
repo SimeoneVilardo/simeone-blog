@@ -4,6 +4,7 @@ title: Simeone's Tech Blog
 theme: ["PaperMod"]
 
 params:
+  description: "A blog about software development and other tech topics"
   homeInfoParams:
     Title: Welcome to my personal blog
     Content: To know more about me, check out on LinkedIn or GitHub
