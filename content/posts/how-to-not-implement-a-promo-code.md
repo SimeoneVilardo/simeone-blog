@@ -83,7 +83,7 @@ How severe is this? Quite severe. Anyone potentially can predict and generate an
 Similarly, `transId`, the transaction number, is a unique incremental for a certain POS on a certain date. The first receipt of POS number N will be `1`, and so forth.
 The only slightly "complex" data to find might be the store ID. Certainly, we're talking about a 4-digit number and a chain with stores everywhere in my country, so almost any number could be valid. But what if we wanted to create a promo code for a specific store rather than just any store? Suppose the company's app (or used to have) a "find stores" section where there was a complete list of every store with its address. And, believe it or not, looking at the JSON of that list reveals that even if it's not shown to the user, the store ID related to each address is present there.
 
-## It Can Get Even Worse? Yes
+## Can It Get Even Worse? Yes
 We've reached the juiciest part of our analysis. Shortly, I'll explain the mystery of the `1` that gets removed during decryption. But first, let's imagine a use case for this promo code system (I assure you this use case went into production for a long period where I live).
 
 > Every user who purchases item A can receive 1 point by entering the promo code related to that purchase on our web app. You can make a maximum of 5 entries per day. When you accumulate 10 points, you can redeem item B for free.
