@@ -2,3 +2,21 @@ baseURL: https://simeone-blog.pages.dev/
 languageCode: en-us
 title: Simeone's Tech Blog
 theme: ["PaperMod"]
+
+params:
+  homeInfoParams:
+    Title: Welcome to my personal blog
+    Content: To know more about me, check out on LinkedIn or GitHub
+
+  socialIcons: # optional
+    - name: "LinkedIn"
+      url: "https://www.linkedin.com/in/simeone-vilardo-a644349a/"
+    - name: "GitHub"
+      url: "https://github.com/SimeoneVilardo"
+
+menu:
+  main:
+    - identifier: tags
+      name: tags
+      url: /tags/
+      weight: 10

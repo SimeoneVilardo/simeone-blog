@@ -4,8 +4,7 @@ title: "My First Post"
 date: "2024-03-17"
 description: "The first post of my blog"
 summary: "This is just a test post to see how it looks like"
-tags: ["programming"]
-categories: ["hacking"]
+tags: ["hacking", "programming"]
 series: ["Reverse Engineering"]
 ---
 
