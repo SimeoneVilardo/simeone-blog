@@ -1,4 +1,0 @@
-baseURL = 'https://simeone-blog.pages.dev/'
-languageCode = 'en-us'
-title = 'My New Hugo Site'
-theme = "bootstrap"

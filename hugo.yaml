@@ -1,0 +1,4 @@
+baseURL: https://simeone-blog.pages.dev/
+languageCode: en-us
+title: Simeone's Tech Blog
+theme: ["PaperMod"]
