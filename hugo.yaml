@@ -11,6 +11,11 @@ params:
   analytics:
     google:
       SiteVerificationTag: QOjde67mQ6hh8rp3k0sK7Iv9VxAyjOBwMmeh991r8QA
+  socialIcons: # optional
+    - name: "LinkedIn"
+      url: "https://www.linkedin.com/in/simeone-vilardo-a644349a/"
+    - name: "GitHub"
+      url: "https://github.com/SimeoneVilardo"
 
 languageCode: en-us
 languages:
@@ -28,14 +33,6 @@ languages:
       homeInfoParams:
         Title: Benvenuti nel mio blog personale
         Content: Per saperne di più su di me, cercami su LinkedIn o GitHub
-
-
-
-socialIcons: # optional
-  - name: "LinkedIn"
-    url: "https://www.linkedin.com/in/simeone-vilardo-a644349a/"
-  - name: "GitHub"
-    url: "https://github.com/SimeoneVilardo"
 
 menu:
   main:
