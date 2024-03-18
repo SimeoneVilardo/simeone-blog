@@ -8,6 +8,9 @@ params:
   homeInfoParams:
     Title: Welcome to my personal blog
     Content: To know more about me, check out on LinkedIn or GitHub
+  analytics:
+    google:
+      SiteVerificationTag: QOjde67mQ6hh8rp3k0sK7Iv9VxAyjOBwMmeh991r8QA
 
 languageCode: en-us
 languages:
