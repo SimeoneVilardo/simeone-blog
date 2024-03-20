@@ -1,7 +1,9 @@
-baseURL: https://simeone-blog.pages.dev/
-languageCode: en-us
+baseURL: "https://blog.simeonevilardo.com/"
 title: Simeone's Tech Blog
-theme: ["PaperMod"]
+languageCode: en-us
+theme: PaperMod
+enableRobotsTXT: true
+
 
 params:
   description: "A blog about software development and other tech topics"
@@ -14,7 +16,6 @@ params:
     - name: "GitHub"
       url: "https://github.com/SimeoneVilardo"
 
-languageCode: en-us
 languages:
   en:
     languageCode: en-us
