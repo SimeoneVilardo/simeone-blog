@@ -8,8 +8,6 @@ tags: ["networking", "homelab"]
 series: ["Network", "Homelab"]
 ---
 
-# Advanced WireGuard on Docker: Split Tunneling, No-NAT, and Hardening on Modern Linux
-
 Configuring WireGuard via Docker (using popular images like `wg-easy`) is often marketed as a 5-minute operation. And it is, if your only goal is a working tunnel without worrying about what happens "under the hood."
 
 However, when you have specific engineering requirements—such as integration with a local DNS (e.g., Pi-hole), the need for real logs (No-NAT), and granular security (Firewalling)—the out-of-the-box configuration reveals its limitations, especially on modern Linux distributions (Debian 12/13, Ubuntu 22.04+) that utilize `nftables` and a complex Docker subsystem.
