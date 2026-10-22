@@ -40,7 +40,7 @@ The function is straightforward and demonstrates that the promo code is simply a
 - `siteId` (Store identification number)
 - `posId` (Terminal identification number conducting the sale)
 - `transId` (Transaction identification number)
-- `days` (Number of days elapsed since December 31, 2024)
+- `days` (Number of days elapsed since December 31, 2014)
 Each component of the promo code, `siteId`, `posId`, `transId`, and `days`, is padded with zeros on the left. For example, if the `siteId` were the number `42`, it would be expressed in the decimal promo code as `0042`.
 
 The conversion from base 28 to base 10 is performed by the `convertBase28ToDecimal` function. It's a standard base conversion function, where the characters forming the base 28 are: `ABCDEFGHIJKLMNOPRSTUWXZ45679`.
@@ -79,9 +79,9 @@ If I try to decode the example I provided earlier, **`OCFBMEGDFXEEE`**, I get th
 }
 ```
 If I encode this information using the inverse function, I indeed get **`OCFBMEGDFXEEE`**.
-How severe is this? Quite severe. Anyone potentially can predict and generate any promo code. Sure, one might argue that you need to know the `siteId`, `posId`, and `transId`. However, as easily anticipated and experimentally verified, `posId` and `transId` are simply incremental numbers starting from 1. Each point of sale has a certain number of cash registers equivalent to `posId`, starting from the number `1`.
-Similarly, `transId`, the transaction number, is a unique incremental for a certain POS on a certain date. The first receipt of POS number N will be `1`, and so forth.
-The only slightly "complex" data to find might be the store ID. Certainly, we're talking about a 4-digit number and a chain with stores everywhere in my country, so almost any number could be valid. But what if we wanted to create a promo code for a specific store rather than just any store? Suppose the company's app (or used to have) a "find stores" section where there was a complete list of every store with its address. And, believe it or not, looking at the JSON of that list reveals that even if it's not shown to the user, the store ID related to each address is present there.
+How severe is this? Quite severe. Anyone can potentially predict and generate any promo code. Sure, one might argue that you need to know the `siteId`, `posId`, and `transId`. However, as easily anticipated and experimentally verified, `posId` and `transId` are simply incremental numbers starting from 1. Each point of sale has a certain number of cash registers, identified by `posId` and numbered starting from `1`.
+Similarly, `transId`, the transaction number, is a unique incremental number for a given POS on a given date. The first receipt of POS number N will be `1`, and so forth.
+The only slightly "complex" data to find might be the store ID. Certainly, we're talking about a 4-digit number and a chain with stores everywhere in my country, so almost any number could be valid. But what if we wanted to create a promo code for a specific store rather than just any store? As it happens, the company's app has (or used to have) a "find stores" section where there was a complete list of every store with its address. And, believe it or not, looking at the JSON of that list reveals that even if it's not shown to the user, the store ID related to each address is present there.
 
 ## Can It Get Even Worse? Yes
 We've reached the juiciest part of our analysis. Shortly, I'll explain the mystery of the `1` that gets removed during decryption. But first, let's imagine a use case for this promo code system (I assure you this use case went into production for a long period where I live).
@@ -109,11 +109,11 @@ This number, when converted to base 28, becomes `GKKF49BLA`.
 Here's the interesting part: when converted to base 10, this number becomes `2406660960900`.
 We've just lost a `0`. Losing a `0` obviously ruins the entire decryption algorithm, which relies on the assumption that each variable has a fixed length of characters.
 This is why the `1` is added during encoding! It's done to handle the case where the transaction ID ends with a `0`, a value that would be lost during conversion to an integer because leading zeros are not significant digits.
-But this means... we've just discovered a way to provoke collisions for every promo code in which the transaction ID is not a multiple of 10.
+But this means... we've just discovered a way to provoke collisions: nothing forces that first character to be `1`.
 We can indeed modify the encoding function as follows:
 ```js
 function generatePromoCode(days, siteId, posId, transId, collisionChar){
-	var decimalCode = siteId + podId + days + transId + collisionChar;
+	var decimalCode = siteId + posId + days + transId + collisionChar;
 	var codeNoChecksum = convertToBase28(reverse(decimalCode));
 	var checksum = generateChecksum(codeNoChecksum);
 	var code = `${codeNoChecksum.charAt(0)}${checksum[2]}${codeNoChecksum.substring(1, 6)}${checksum[1]}${codeNoChecksum.substring(6, 9)}${checksum[0]}${codeNoChecksum.charAt(9)}`;
@@ -122,24 +122,23 @@ function generatePromoCode(days, siteId, posId, transId, collisionChar){
 ```
 And invoke this function twice:
 ```js
-var promoCode1 = generatePromoCode(1476, 37, 6, 5, "0");
-var promoCode2 = generatePromoCode(1476, 37, 6, 5, "1");
-console.log(promoCode1); // "EHWKEBGSDW9HR"
-console.log(promoCode2); // "OCFBMEGDFXEEE"
+var promoCode1 = generatePromoCode(1476, 37, 6, 5, "1");
+var promoCode2 = generatePromoCode(1476, 37, 6, 5, "2");
+console.log(promoCode1); // "OCFBMEGDFXEEE"
+console.log(promoCode2); // "4MSWWHGTHXIPW"
 ```
-The two generated promo codes, namely **`EHWKEBGSDW9HR`** and **`OCFBMEGDFXEEE`**, are both valid, correctly decoded by the official decoding function, and contain the same information!
-It is also possible to exploit this approach to try a second collision, in this case valid even for transactions with IDs ending in `0`. You must have already guessed it; just use `2` as the final character. In this case, we have:
-```js
-var promoCode3 = generatePromoCode(1476, 37, 6, 5, "2");
-console.log(promoCode3); // "4MSWWHGTHXIPW"
-```
-Our new promo code **`4MSWWHGTHXIPW`** also encodes the same information. It is possible to continue and generate further collisions at least until using the char `9`? Unfortunately (or fortunately), it is not possible. Any attempt to generate promo codes with `collisionChar` greater than 2 will corrupt the encoded data. Why? Simple, because the `collisionChar` will inevitably end up as the first place on the left of the decimal number. Since this decimal number will be converted to base 28 and result in a string length of 10 characters, it must necessarily be less than or equal to `296196766695423` (28^10).
+The two generated promo codes, namely **`OCFBMEGDFXEEE`** and **`4MSWWHGTHXIPW`**, are both valid, correctly decoded by the official decoding function, and contain the same information!
+What about `0`? It doesn't work, for the same reason we've just seen: the leading `0` is lost during the conversion, so the decoding function removes the last digit of the transaction ID instead of our padding character. The code generated with `0`, **`EHWKEBGSDW9HR`**, has a valid checksum, but it decodes to a `transId` of `0` instead of `5`.
+Is it possible to continue and generate further collisions, up to the char `9`? Unfortunately (or fortunately), it is not possible. Any attempt to generate promo codes with `collisionChar` greater than 2 will corrupt the encoded data. Why? Simple, because the `collisionChar` will inevitably end up as the first place on the left of the decimal number. Since this decimal number must be converted to a base 28 string of 10 characters, it must necessarily be less than or equal to `296196766695423` (28^10 - 1).
 Having `3` as the first numerical value will result in a number that, when converted to base 28, is 11 characters long.
+For the same reason, even `2` doesn't work in every case: if the transaction ID ends in `79`, `89` or `99` (and in a few cases ending in `69`), the number exceeds that limit.
 
 ## What's the moral?
 When creating these systems, make sure that the generated codes:
 - Are not predictable and reproducible
 - Cannot generate collisions
 
-In my opinion, it would be nice to be able to generate self-contained codes, but I'm not sure if it's possible. JWT tokens are a great example; thanks to their digital signature mechanism, you can trust their content and origin. However, if such a token needs to be manually used by the user, it should be as short and easy as possible, so embedding the signature within the token doesn't seem feasible.
-Let's not skimp. Let's use tables and let's use API calls. A simple random alphanumeric string of 8 characters allows for `2821109907456` combinations. That's almost three trillion. And being random, good luck reproducing a code or generating a collision.
+Note that the real problem isn't just the front-end: the checksum doesn't use any secret key, so moving the same algorithm to the back-end would make reverse engineering harder, not impossible. As for collisions, it would have been enough to reject codes whose padding character isn't `1`, or even better, to keep track of the decoded receipt (store, POS, day, transaction) instead of the code string.
+
+In my opinion, it would be nice to be able to generate self-contained codes, and it is possible. JWT tokens are a great example; thanks to their digital signature mechanism, you can trust their content and origin. However, if such a token needs to be manually used by the user, it should be as short and easy as possible, so embedding a full signature within the token isn't feasible. But a full signature isn't needed: a few characters of a MAC (for example, a truncated HMAC-SHA256), computed with a secret key known only to the back-end, can take the place of the checksum. This is probably also why the company chose self-contained codes in the first place: the cash register can print them without contacting any server.
+Otherwise, let's not skimp. Let's use tables and let's use API calls. A simple random alphanumeric string of 8 characters allows for `2821109907456` combinations. That's almost three trillion. And being random, good luck reproducing a code or generating a collision (just remember a uniqueness constraint on the table: random codes can collide by chance too).
