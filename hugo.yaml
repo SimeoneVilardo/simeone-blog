@@ -1,15 +1,13 @@
 baseURL: "https://blog.simeonevilardo.com/"
 title: Simeone's Tech Blog
-languageCode: en-us
+locale: en-us
 theme: PaperMod
 enableRobotsTXT: true
 
+minify:
+  minifyOutput: true
 
 params:
-  description: "A blog about software development and other tech topics"
-  homeInfoParams:
-    Title: Welcome to my personal blog
-    Content: To know more about me, check out on LinkedIn or GitHub
   socialIcons:
     - name: "LinkedIn"
       url: "https://www.linkedin.com/in/simeone-vilardo-a644349a/"
@@ -18,14 +16,14 @@ params:
 
 languages:
   en:
-    languageCode: en-us
+    locale: en-us
     params:
       description: "A blog about software development and other tech topics"
       homeInfoParams:
         Title: Welcome to my personal blog
         Content: To know more about me, check out on LinkedIn or GitHub
   it:
-    languageCode: it-it
+    locale: it-it
     params:
       description: "Un blog su sviluppo software e altri argomenti tecnici"
       homeInfoParams:
@@ -38,3 +36,8 @@ menu:
       name: tags
       url: /tags/
       weight: 10
+
+taxonomies:
+  category: categories
+  tag: tags
+  series: series
